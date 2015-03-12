@@ -17,6 +17,8 @@ injector.registerFake('fake_context', function () {
 injector.registerFake('canvas', ['fake_context', function (fake_context) {
     this.fake_context = fake_context;
     this.getContext = sinon.stub();
+    this.width = 200;
+    this.height = 200;
     this.getContext.withArgs('2d').returns(this.fake_context)
 }]);
 

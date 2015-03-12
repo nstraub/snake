@@ -27,16 +27,10 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
             ]
 
             it 'draws a horizontal line between tail and head', injector.inject ['tail', 'head', (tail, head) ->
-                head.position =
-                    x: 50,
-                    y: 20
-
+                head.position = x: 50, y: 20
                 head.direction = directions.right;
 
-                tail.position =
-                    x: 10,
-                    y: 20
-
+                tail.position = x: 10, y: 20
                 tail.direction = directions.right;
 
                 body.from = tail;
@@ -174,7 +168,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
                 expect(body.context.fillRect).toHaveBeenCalledWith 10, 20, 40, 10
             ]
 
-            it 'draws a vertical line between tail and axis', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+            it 'draws a vertical line between axis and axis', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
                 axis_to.position =
                     x: 20,
                     y: 50
@@ -195,8 +189,105 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
                 expect(body.context.fillRect).toHaveBeenCalledWith 20, 10, 10, 40
             ]
 
+            it 'draws an upward vertical line that overlaps the map', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+                axis_to.position =
+                    x: 20,
+                    y: 20
 
-        describe 'locatedAt', () ->
+                axis_to.from_direction = directions.up;
+
+                axis_from.position =
+                    x: 20,
+                    y: 180
+
+                axis_from.to_direction = directions.up;
+
+                body.from = axis_from;
+                body.to = axis_to;
+
+                body.draw()
+
+                expect(body.context.fillRect).toHaveBeenCalledTwice()
+                expect(body.context.fillRect).toHaveBeenCalledWith 20, 180, 10, 20
+                expect(body.context.fillRect).toHaveBeenCalledWith 20, 0, 10, 20
+
+            ]
+
+            it 'draws a downward vertical line that overlaps the map', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+                axis_to.position =
+                    x: 20,
+                    y: 180
+
+                axis_to.from_direction = directions.down;
+
+                axis_from.position =
+                    x: 20,
+                    y: 20
+
+                axis_from.to_direction = directions.down;
+
+                body.from = axis_from;
+                body.to = axis_to;
+
+                body.draw()
+
+                expect(body.context.fillRect).toHaveBeenCalledTwice()
+                expect(body.context.fillRect).toHaveBeenCalledWith 20, 180, 10, 20
+                expect(body.context.fillRect).toHaveBeenCalledWith 20, 0, 10, 20
+
+            ]
+
+            it 'draws a horizontal line to the right that overlaps the map', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+                axis_to.position =
+                    x: 20,
+                    y: 20
+
+                axis_to.from_direction = directions.right;
+
+                axis_from.position =
+                    x: 180,
+                    y: 20
+
+                axis_from.to_direction = directions.right;
+
+                body.from = axis_from;
+                body.to = axis_to;
+
+                body.draw()
+
+                expect(body.context.fillRect).toHaveBeenCalledTwice()
+                expect(body.context.fillRect).toHaveBeenCalledWith 180, 20, 20, 10
+                expect(body.context.fillRect).toHaveBeenCalledWith 0, 20, 20, 10
+            ]
+
+
+            it 'draws a horizontal line to the left that overlaps the map', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+                axis_to.position =
+                    x: 180,
+                    y: 20
+
+                axis_to.from_direction = directions.left;
+
+                axis_from.position =
+                    x: 20,
+                    y: 20
+
+                axis_from.to_direction = directions.left;
+
+                body.from = axis_from;
+                body.to = axis_to;
+
+                body.draw()
+
+                expect(body.context.fillRect).toHaveBeenCalledTwice()
+                expect(body.context.fillRect).toHaveBeenCalledWith 180, 20, 20, 10
+                expect(body.context.fillRect).toHaveBeenCalledWith 0, 20, 20, 10
+            ]
+
+
+
+
+        describe 'isLocatedAt', () ->
             it 'returns true if the passed position is contained within a horizontal line drawn to the left', () ->
                 body.from =
                     position:
@@ -209,7 +300,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
                         y: 20
                     direction: directions.left
 
-                expect(body.locatedAt(x: 20, y: 50)).toBe true
+                expect(body.isLocatedAt(x: 20, y: 50)).toBe true
 
             it 'returns true if the passed position is contained within a horizontal line drawn to the right', () ->
                 body.to =
@@ -223,7 +314,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
                         y: 20
                     direction: directions.right
 
-                expect(body.locatedAt(x: 20, y: 50)).toBe true
+                expect(body.isLocatedAt(x: 20, y: 50)).toBe true
 
             it 'returns true if the passed position is contained within a vertical line drawn upwards', () ->
                 body.from =
@@ -237,7 +328,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
                         y: 20
                     direction: directions.up
 
-                expect(body.locatedAt(x: 50, y: 20)).toBe true
+                expect(body.isLocatedAt(x: 50, y: 20)).toBe true
 
             it 'returns true if the passed position is contained within a vertical line drawn downwards', () ->
                 body.to =
@@ -251,6 +342,48 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
                         y: 20
                     direction: directions.down
 
-                expect(body.locatedAt(x: 50, y: 20)).toBe true
+                expect(body.isLocatedAt(x: 50, y: 20)).toBe true
+
+            it 'returns true if the passed position is on the upper border of the line', () ->
+                body.to =
+                    position:
+                        x: 70
+                        y: 20
+                    direction: directions.down
+                body.from =
+                    position:
+                        x: 20
+                        y: 20
+                    direction: directions.down
+
+                expect(body.isLocatedAt(x: 70, y: 20)).toBe true
+
+            it 'returns true if the passed position is on the lower border of the line', () ->
+                body.to =
+                    position:
+                        x: 70
+                        y: 20
+                    direction: directions.down
+                body.from =
+                    position:
+                        x: 20
+                        y: 20
+                    direction: directions.down
+
+                expect(body.isLocatedAt(x: 20, y: 20)).toBe true
+
+            it 'returns true if passed position is within the body`s girth', () ->
+                body.to =
+                    position:
+                        x: 70
+                        y: 20
+                    direction: directions.down
+                body.from =
+                    position:
+                        x: 20
+                        y: 20
+                    direction: directions.down
+
+                expect(body.isLocatedAt(x: 20, y: 30)).toBe true
 
 ]
