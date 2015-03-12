@@ -6,8 +6,8 @@
         this.dispatcher = dispatcher;
     }
 
-    Tail.prototype.draw = function (position) {
-        this.context.fillRect(position.x, position.y, 10, 10)
+    Tail.prototype.draw = function () {
+        this.context.fillRect(this.position.x, this.position.y, 10, 10)
     };
 
     Tail.prototype.follow = function (part) {

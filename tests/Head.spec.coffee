@@ -58,7 +58,8 @@ describe 'Head', injector.inject ['head', (head) ->
             ]
 
             it 'places itself on the canvas at the specified position', () ->
-                head.draw({x: 10, y: 10});
+                head.position = x: 10, y: 10
+                head.draw();
 
                 expect(head.canvas.fake_context.fillRect).toHaveBeenCalledWith 10, 10, 10, 10
 

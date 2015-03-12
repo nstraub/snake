@@ -31,7 +31,8 @@ describe 'Tail', injector.inject ['tail', (tail) ->
             ]
 
             it 'places itself on the canvas at the specified position', () ->
-                tail.draw({x: 10, y: 10});
+                tail.position = x: 10, y: 10
+                tail.draw();
 
                 expect(tail.canvas.fake_context.fillRect).toHaveBeenCalledWith 10, 10, 10, 10
 

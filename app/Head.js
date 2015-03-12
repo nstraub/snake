@@ -21,8 +21,8 @@
         }
     };
 
-    Head.prototype.draw = function (position) {
-        this.context.fillRect(position.x, position.y, 10, 10)
+    Head.prototype.draw = function () {
+        this.context.fillRect(this.position.x, this.position.y, 10, 10)
     };
 
     Head.prototype.changeDirection = function (direction) {
