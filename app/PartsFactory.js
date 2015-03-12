@@ -1,6 +1,7 @@
 /**
  * Created by nico on 12/03/2015.
  */
+'use strict';
 (function () {
     function PartsFactory() {}
 

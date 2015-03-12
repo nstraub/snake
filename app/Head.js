@@ -1,6 +1,7 @@
 /**
  * Created by nico on 11/03/2015.
  */
+'use strict';
 (function () {
     function Head (dispatcher, canvas, directions) {
         this.dispatcher = dispatcher;
