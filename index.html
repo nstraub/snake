@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html>
+<head>
+    <title>Snake Game</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="main">
+        <h1>Snake</h1>
+        <div class="canvas-wrapper"><canvas id="game"width="500" height="500"></canvas></div>
+        <div class="options">
+            <h2 class="score">Score: <span id="current-score">0</span></h2>
+            <h3>Speed: <input id="speed" type="text" value="1"/></h3>
+            <h3>Size: <button id="size--small">S</button><button id="size--medium">M</button><button id="size--large">L</button></h3>
+            <h3>Maze:</h3>
+            <div id="mazes-wrapper"></div>
+        </div>
+    </div>
+</body>
+<script src="lib/jquery.js"></script>
+<script src="lib/lodash.js"></script>
+<script src="app/body.js"></script>
+<script src="app/snake.js"></script>
+<script src="app/apple.js"></script>
+<script src="app/mazes.js"></script>
+<script src="app/helpers.js"></script>
+<script src="app/main.js"></script>
+</html>

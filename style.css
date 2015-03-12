@@ -1,0 +1,43 @@
+canvas {
+    border: 1px dotted gray;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+canvas#game {
+    display: block;
+}
+
+div.canvas-wrapper {
+    width: 500px;
+    height: 500px;
+    position: absolute;
+
+}
+
+div.main {
+    width: 700px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.options {
+    position: absolute;
+    right: 0px;
+    width: 160px;
+    padding-right:25px;
+    padding-left: 25px;
+}
+
+h2.score {
+    text-align: right;
+}
+
+div.options h3 {
+    text-align: right;
+}
+
+div.options input {
+    width: 50px;
+}
