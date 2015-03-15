@@ -15,7 +15,10 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            '../lib/*.js',
+            '../lib/lodash.js',
+            '../lib/inject.js',
+            '../lib/Backbone.min.js',
+            '../lib/jquery.js',
             '../app/*.js',
             '*.js',
             '*.coffee'
