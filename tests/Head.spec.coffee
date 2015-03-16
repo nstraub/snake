@@ -25,4 +25,6 @@ describe 'Head', injector.inject ['head', (head) ->
         describe 'draw', head_draw_spec
 
         describe 'changeDirection', head_change_direction_spec
+
+        describe 'enqueueDirectionChange', head_enqueue_direction_change_spec
 ]

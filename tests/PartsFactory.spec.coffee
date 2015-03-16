@@ -9,4 +9,12 @@ describe 'Parts Factory', injector.inject ['partsFactory', (parts_factory) ->
             expect(body.from).toBe tail
             expect(body.to).toBe head
         ]
+
+        it 'can create an axis', injector.inject ['directions', (directions) ->
+            axis_position = {x: 20, y: 20}
+            axis = parts_factory.createAxis axis_position, directions.right, directions.up
+
+            expect(axis.position).not.toBe axis_position
+            expect(axis.position).toEqual axis_position
+        ]
 ]

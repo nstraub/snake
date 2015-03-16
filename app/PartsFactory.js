@@ -12,5 +12,13 @@
         return body;
     };
 
+    PartsFactory.prototype.createAxis = function (position, from_direction, to_direction) {
+        var axis = injector.instantiate('axis');
+        axis.position = _.clone(position);
+        axis.from_direction = from_direction;
+        axis.to_direction = to_direction;
+        return axis;
+    };
+
     injector.registerType('partsFactory', PartsFactory, 'singleton');
 }());

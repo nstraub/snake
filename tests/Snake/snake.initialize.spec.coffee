@@ -1,9 +1,13 @@
 snake_initialize_spec = injector.harness ['snake', (snake) ->
-    beforeEach injector.inject ['dispatcher', (dispatcher) ->
+    beforeEach injector.inject ['dispatcher', 'partsFactory', (dispatcher, parts_factory) ->
         sinon.spy(snake.tail, 'follow')
         sinon.stub(snake, 'draw')
+        sinon.stub(snake, 'addAxis')
 
         snake.dispatcher = dispatcher
+        snake.parts_factory = parts_factory
+
+        parts_factory.createBody.returns('test body')
 
         snake.initialize {x: 60, y: 10}, 4
     ]
@@ -11,6 +15,7 @@ snake_initialize_spec = injector.harness ['snake', (snake) ->
     afterEach () ->
         snake.tail.follow.restore()
         snake.draw.restore()
+        snake.addAxis.restore()
         snake.bodies = []
         delete snake.head.position
         delete snake.tail.position
@@ -29,6 +34,13 @@ snake_initialize_spec = injector.harness ['snake', (snake) ->
         snake.dispatcher.on.args[0][1]()
 
         expect(snake.draw).toHaveBeenCalledOn snake
+
+    it 'registers a changed:direction event on the dispatcher', () ->
+        expect(snake.dispatcher.on).toHaveBeenCalledWith 'changed:direction'
+        snake.dispatcher.on.args[1][1](0, 0)
+
+        expect(snake.addAxis).toHaveBeenCalledOn snake
+        expect(snake.addAxis).toHaveBeenCalledWith 0, 0
 
     it 'creates a body from head to tail', () ->
         expect(snake.parts_factory.createBody).toHaveBeenCalledWith snake.tail, snake.head

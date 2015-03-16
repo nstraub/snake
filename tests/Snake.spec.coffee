@@ -1,7 +1,7 @@
 describe 'snake', () ->
     injector.registerFake 'partsFactory', () ->
         @createBody = sinon.stub()
-        @createBody.returns('test body')
+        @createAxis = sinon.stub()
         return
 
 
@@ -25,4 +25,6 @@ describe 'snake', () ->
             describe 'move', snake_move_spec
 
             describe 'grow', snake_grow_spec
+
+            describe 'addAxis', snake_add_axis_spec
     ]

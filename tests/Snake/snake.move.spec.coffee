@@ -7,6 +7,12 @@ snake_move_spec = injector.harness ['directions', 'snake', (directions, snake) -
 
         head.direction = directions.up
         tail.direction = directions.up
+
+        sinon.stub head, 'changeDirection'
+    ]
+
+    afterEach injector.inject ['head', (head) ->
+        head.changeDirection.restore()
     ]
 
     it 'moves head when it is pointing right', () ->
@@ -66,4 +72,22 @@ snake_move_spec = injector.harness ['directions', 'snake', (directions, snake) -
         snake.move()
 
         expect(snake.head.position.x).toBe 0
+
+    it 'changes head`s direction when direction queue still has elments', () ->
+        snake.head.direction_change_queue.push(directions.right)
+
+        snake.move()
+
+        expect(snake.head.changeDirection).toHaveBeenCalledOnce()
+        expect(snake.head.changeDirection).toHaveBeenCalledWith(directions.right)
+
+    it 'sets head`s direction change flag when direction queue no longer has elments', () ->
+        snake.head.direction_change_queue = []
+        snake.head.changing_direction = true
+
+        snake.move()
+
+        expect(snake.head.changeDirection).not.toHaveBeenCalled()
+        expect(snake.head.changing_direction).toBe false
+
 ]

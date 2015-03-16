@@ -2,9 +2,10 @@
  * Created by nico on 14/03/2015.
  */
 (function ($) {
-    var frame = 0, maze, speed = 5, animation;
+    var frame = 0, maze, speed = 20, animation;
+    var directions = _([38, 39, 40, 37]);
     function Main (snake, dispatcher, area) {
-        snake.initialize({x: 60, y: 20}, 4);
+        snake.initialize({x: 60, y: 20}, 10);
         var context = area.getContext('2d');
 
         dispatcher.on('clear', function () {
@@ -39,6 +40,25 @@
 
         animate();
 
+        $(document).keydown(function (e) {
+            if (e.which === 32) {
+                if (animation) {
+                    window.cancelAnimationFrame(animation);
+                    animation = null;
+                } else {
+                    draw();
+                }
+            } else {
+                var index = directions.findIndex(function (item) {
+                    return item == e.which;
+                });
+
+                if (index > -1) {
+                    dispatcher.trigger('change:direction', index);
+                }
+            }
+        });
+
     }
 
     injector.registerMain(['snake', 'dispatcher', 'area', Main]);
@@ -62,5 +82,6 @@
         }, 'singleton');
 
         injector.run();
+
     });
 }(jQuery));

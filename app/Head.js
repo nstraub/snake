@@ -9,6 +9,8 @@
         this.context = area.getContext('2d');
         this.directions = directions;
         this.direction = directions.right;
+        this.dispatcher.on('change:direction', _.bind(this.enqueueDirectionChange, this))
+        this.direction_change_queue = [];
     }
 
     Head.prototype.eat = function (block) {
@@ -29,9 +31,19 @@
     Head.prototype.changeDirection = function (direction) {
         var current_direction = this.direction;
 
-        this.direction = direction;
+        if (current_direction !== direction) {
+            this.changing_direction = true;
+            this.direction = direction;
+            this.dispatcher.trigger('changed:direction', current_direction, direction)
+        }
+    };
 
-        this.dispatcher.trigger('change:direction', current_direction, direction)
+    Head.prototype.enqueueDirectionChange = function (direction) {
+        if (this.changing_direction) {
+            this.direction_change_queue.push(direction)
+        } else {
+            this.changeDirection(direction);
+        }
     };
 
 
