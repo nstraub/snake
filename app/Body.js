@@ -21,32 +21,32 @@
 
         switch (direction) {
             case this.directions.up:
-                if (from_position.y < to_position.y) {
-                    this.context.fillRect(from_position.x, from_position.y, 10, to_position.y - from_position.y);
-                } else {
-                    this.context.fillRect(from_position.x, from_position.y, 10, this.area.height - from_position.y);
-                    this.context.fillRect(from_position.x, 0, 10, to_position.y);
-                }
-                break;
-            case this.directions.down:
                 if (from_position.y > to_position.y) {
-                    this.context.fillRect(from_position.x, from_position.y, 10, to_position.y - from_position.y);
+                    this.context.fillRect(to_position.x, to_position.y, 10, from_position.y - to_position.y);
                 } else {
                     this.context.fillRect(from_position.x, to_position.y, 10, this.area.height - to_position.y);
                     this.context.fillRect(from_position.x, 0, 10, from_position.y);
                 }
                 break;
+            case this.directions.down:
+                if (from_position.y < to_position.y) {
+                    this.context.fillRect(from_position.x, from_position.y, 10, to_position.y - from_position.y + 10);
+                } else {
+                    this.context.fillRect(from_position.x, from_position.y, 10, this.area.height - from_position.y);
+                    this.context.fillRect(from_position.x, 0, 10, to_position.y + 10);
+                }
+                break;
             case this.directions.right:
                 if (from_position.x < to_position.x) {
-                    this.context.fillRect(from_position.x, from_position.y, to_position.x - from_position.x, 10);
+                    this.context.fillRect(from_position.x, from_position.y, to_position.x - from_position.x + 10, 10);
                 } else {
                     this.context.fillRect(from_position.x, from_position.y, this.area.width - from_position.x, 10);
-                    this.context.fillRect(0, from_position.y, to_position.x, 10);
+                    this.context.fillRect(0, from_position.y, to_position.x + 10, 10);
                 }
                 break;
             case this.directions.left:
                 if (from_position.x > to_position.x) {
-                    this.context.fillRect(from_position.x, from_position.y, to_position.x - from_position.x, 10);
+                    this.context.fillRect(to_position.x, from_position.y, from_position.x - to_position.x, 10);
                 } else {
                     this.context.fillRect(to_position.x, from_position.y, this.area.width - to_position.x, 10);
                     this.context.fillRect(0, from_position.y, from_position.x, 10);

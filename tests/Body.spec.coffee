@@ -1,8 +1,9 @@
 describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
-    injector.registerFake 'axis', ['directions', (directions) ->
-        @from_direction = directions.right
-        return
-    ]
+    beforeAll () ->
+        injector.registerFake 'axis', ['directions', (directions) ->
+            @from_direction = directions.right
+            return
+        ]
 
     beforeAll add_instanceof_matcher
     afterAll () ->
