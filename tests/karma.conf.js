@@ -21,6 +21,7 @@ module.exports = function (config) {
             '../lib/jquery.js',
             '../app/*.js',
             '*.js',
+            '*/*.coffee',
             '*.coffee'
         ],
 
