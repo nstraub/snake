@@ -14,7 +14,7 @@ injector.registerFake('fake_context', function () {
     this.getImageData = sinon.stub();
 });
 
-injector.registerFake('canvas', ['fake_context', function (fake_context) {
+injector.registerFake('area', ['fake_context', function (fake_context) {
     this.fake_context = fake_context;
     this.getContext = sinon.stub();
     this.width = 200;

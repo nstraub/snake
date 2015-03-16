@@ -3,10 +3,10 @@
  */
 'use strict';
 (function () {
-    function Head (dispatcher, canvas, directions) {
+    function Head (dispatcher, area, directions) {
         this.dispatcher = dispatcher;
-        this.canvas = canvas;
-        this.context = canvas.getContext('2d');
+        this.area = area;
+        this.context = area.getContext('2d');
         this.directions = directions;
         this.direction = directions.right;
     }
@@ -35,5 +35,5 @@
     };
 
 
-    injector.registerType('head', ['dispatcher', 'canvas', 'directions', Head], 'transient');
+    injector.registerType('head', ['dispatcher', 'area', 'directions', Head], 'singleton');
 }());

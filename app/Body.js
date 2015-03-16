@@ -3,10 +3,10 @@
  */
 'use strict';
 (function () {
-    function Body(dispatcher, canvas, directions) {
+    function Body(dispatcher, area, directions) {
         this.dispatcher = dispatcher;
-        this.canvas = canvas;
-        this.context = canvas.getContext('2d');
+        this.area = area;
+        this.context = area.getContext('2d');
         this.directions = directions;
     }
 
@@ -24,7 +24,7 @@
                 if (from_position.y < to_position.y) {
                     this.context.fillRect(from_position.x, from_position.y, 10, to_position.y - from_position.y);
                 } else {
-                    this.context.fillRect(from_position.x, from_position.y, 10, this.canvas.height - from_position.y);
+                    this.context.fillRect(from_position.x, from_position.y, 10, this.area.height - from_position.y);
                     this.context.fillRect(from_position.x, 0, 10, to_position.y);
                 }
                 break;
@@ -32,7 +32,7 @@
                 if (from_position.y > to_position.y) {
                     this.context.fillRect(from_position.x, from_position.y, 10, to_position.y - from_position.y);
                 } else {
-                    this.context.fillRect(from_position.x, to_position.y, 10, this.canvas.height - to_position.y);
+                    this.context.fillRect(from_position.x, to_position.y, 10, this.area.height - to_position.y);
                     this.context.fillRect(from_position.x, 0, 10, from_position.y);
                 }
                 break;
@@ -40,7 +40,7 @@
                 if (from_position.x < to_position.x) {
                     this.context.fillRect(from_position.x, from_position.y, to_position.x - from_position.x, 10);
                 } else {
-                    this.context.fillRect(from_position.x, from_position.y, this.canvas.width - from_position.x, 10);
+                    this.context.fillRect(from_position.x, from_position.y, this.area.width - from_position.x, 10);
                     this.context.fillRect(0, from_position.y, to_position.x, 10);
                 }
                 break;
@@ -48,7 +48,7 @@
                 if (from_position.x > to_position.x) {
                     this.context.fillRect(from_position.x, from_position.y, to_position.x - from_position.x, 10);
                 } else {
-                    this.context.fillRect(to_position.x, from_position.y, this.canvas.width - to_position.x, 10);
+                    this.context.fillRect(to_position.x, from_position.y, this.area.width - to_position.x, 10);
                     this.context.fillRect(0, from_position.y, from_position.x, 10);
                 }
                 break;
@@ -82,5 +82,5 @@
             && position[range_checker] >= low_point[range_checker];
     };
 
-    injector.registerType('body', ['dispatcher', 'canvas', 'directions', Body], 'transient')
+    injector.registerType('body', ['dispatcher', 'area', 'directions', Body], 'transient')
 }());

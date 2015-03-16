@@ -26,10 +26,13 @@ describe 'snake', () ->
             describe 'initialize', () ->
                 beforeEach () ->
                     sinon.spy(snake.tail, 'follow')
+                    sinon.stub(snake, 'draw')
+
                     snake.initialize {x: 60, y: 10}, 4
 
                 afterEach () ->
                     snake.tail.follow.restore()
+                    snake.draw.restore()
                     snake.bodies = []
                     delete snake.head.position
                     delete snake.tail.position
@@ -44,7 +47,9 @@ describe 'snake', () ->
                     expect(snake.tail.follow).toHaveBeenCalledWith snake.head
 
                 it 'registers a draw event on the dispatcher', () ->
-                    expect(snake.dispatcher.on).toHaveBeenCalledWith 'draw', snake.draw
+                    expect(snake.dispatcher.on).toHaveBeenCalledWith 'draw'
+                    snake.dispatcher.on.args[0][1]()
+                    expect(snake.draw).toHaveBeenCalledOn snake
 
                 it 'creates a body from head to tail', () ->
                     expect(snake.parts_factory.createBody).toHaveBeenCalledWith snake.tail, snake.head
@@ -77,11 +82,96 @@ describe 'snake', () ->
 
                     expect(draw_spy).toHaveBeenCalledTwice()
 
-                it 'clears the canvas first', () ->
+                it 'clears the area first', () ->
                     snake.draw()
 
                     expect(snake.dispatcher.trigger).toHaveBeenCalledWith 'clear'
                     expect(snake.dispatcher.trigger).toHaveBeenCalledBefore snake.head.draw
                     expect(snake.dispatcher.trigger).toHaveBeenCalledBefore snake.tail.draw
 
+            describe 'move', injector.harness ['directions', (directions) ->
+                beforeEach injector.inject ['head', 'tail', (head, tail) ->
+                    head.position = x: 50, y: 50
+                    tail.position = x: 50, y: 50
+
+                    head.direction = directions.up
+                    tail.direction = directions.up
+                ]
+
+                it 'moves head when it is pointing right', () ->
+                    snake.head.direction = directions.right
+                    snake.move()
+                    expect(snake.head.position.x).toBe 60
+                it 'moves head when it is pointing left', () ->
+                    snake.head.direction = directions.left
+                    snake.move()
+                    expect(snake.head.position.x).toBe 40
+                it 'moves tail when it is pointing right', () ->
+                    snake.tail.direction = directions.right
+                    snake.move()
+                    expect(snake.tail.position.x).toBe 60
+                it 'moves tail when it is pointing left', () ->
+                    snake.tail.direction = directions.left
+                    snake.move()
+                    expect(snake.tail.position.x).toBe 40
+                it 'moves head when it is pointing up', () ->
+                    snake.move()
+                    expect(snake.head.position.y).toBe 40
+                it 'moves head when it is pointing down', () ->
+                    snake.head.direction = directions.down
+                    snake.move()
+                    expect(snake.head.position.y).toBe 60
+                it 'moves tail when it is pointing up', () ->
+                    snake.move()
+                    expect(snake.tail.position.y).toBe 40
+                it 'moves tail when it is pointing down', () ->
+                    snake.tail.direction = directions.down
+                    snake.move()
+                    expect(snake.tail.position.y).toBe 60
+
+                it 'wraps movement when pointing up and new position is outside area', () ->
+                    snake.head.position.y = 0;
+                    snake.move()
+
+                    expect(snake.head.position.y).toBe 190
+
+                it 'wraps movement when pointing down and new position is outside area', () ->
+                    snake.head.direction = directions.down
+                    snake.head.position.y = 190;
+                    snake.move()
+
+                    expect(snake.head.position.y).toBe 0
+
+                it 'wraps movement when pointing left and new position is outside area', () ->
+                    snake.head.direction = directions.left
+                    snake.head.position.x = 0;
+                    snake.move()
+
+                    expect(snake.head.position.x).toBe 190
+
+                it 'wraps movement when pointing right and new position is outside area', () ->
+                    snake.head.direction = directions.right
+                    snake.head.position.x = 190;
+                    snake.move()
+
+                    expect(snake.head.position.x).toBe 0
+            ]
+
+            describe 'grow', injector.harness ['directions', (directions) ->
+                beforeEach injector.inject ['head', 'tail', (head, tail) ->
+                    head.position = x: 50, y: 50
+                    tail.position = x: 50, y: 50
+
+                    head.direction = directions.up
+                    tail.direction = directions.up
+                ]
+
+                it 'moves just the head', () ->
+                    snake.grow();
+
+                    expect(snake.head.position.x).toBe 50
+                    expect(snake.head.position.y).toBe 40
+                    expect(snake.tail.position.x).toBe 50
+                    expect(snake.tail.position.y).toBe 50
+            ]
     ]

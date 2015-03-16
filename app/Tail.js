@@ -3,8 +3,10 @@
  */
 'use strict';
 (function () {
-    function Tail (dispatcher) {
+    function Tail (dispatcher, area) {
         this.dispatcher = dispatcher;
+        this.area = area;
+        this.context = area.getContext('2d');
     }
 
     Tail.prototype.draw = function () {
@@ -21,5 +23,5 @@
         this.following = part;
     };
 
-    injector.registerType('tail', ['dispatcher', Tail], 'singleton');
+    injector.registerType('tail', ['dispatcher', 'area', Tail], 'singleton');
 }());

@@ -8,7 +8,7 @@
 <body>
     <div class="main">
         <h1>Snake</h1>
-        <div class="canvas-wrapper"><canvas id="game"width="500" height="500"></canvas></div>
+        <div class="canvas-wrapper"><canvas id="game" width="500" height="500"></canvas></div>
         <div class="options">
             <h2 class="score">Score: <span id="current-score">0</span></h2>
             <h3>Speed: <input id="speed" type="text" value="1"/></h3>
@@ -20,10 +20,13 @@
 </body>
 <script src="lib/jquery.js"></script>
 <script src="lib/lodash.js"></script>
-<script src="app/body.js"></script>
-<script src="app/snake.js"></script>
-<script src="app/apple.js"></script>
-<script src="app/mazes.js"></script>
-<script src="app/helpers.js"></script>
-<script src="app/main.js"></script>
+<script src="lib/Backbone.min.js"></script>
+<script src="lib/inject.js"></script>
+<script src="app/Body.js"></script>
+<script src="app/Snake.js"></script>
+<script src="app/Head.js"></script>
+<script src="app/Tail.js"></script>
+<script src="app/PartsFactory.js"></script>
+
+<script src="app/Main.js"></script>
 </html>

@@ -19,6 +19,7 @@ describe 'Tail', injector.harness ['tail', (tail) ->
     describe 'constructor', () ->
         it 'initializes correctly', () ->
             expect(tail.dispatcher).toBeInstanceOf injector.getType 'dispatcher'
+            expect(tail.area).toBeInstanceOf injector.getType 'area'
 
 
     describe 'methods', () ->
@@ -27,16 +28,16 @@ describe 'Tail', injector.harness ['tail', (tail) ->
         ]
 
         describe 'draw', () ->
-            beforeEach injector.harness ['canvas', (canvas) ->
-                tail.canvas = canvas
-                tail.context = canvas.getContext('2d')
+            beforeEach injector.harness ['area', (area) ->
+                tail.area = area
+                tail.context = area.getContext('2d')
             ]
 
-            it 'places itself on the canvas at the specified position', () ->
+            it 'places itself on the area at the specified position', () ->
                 tail.position = x: 10, y: 10
                 tail.draw();
 
-                expect(tail.canvas.fake_context.fillRect).toHaveBeenCalledWith 10, 10, 10, 10
+                expect(tail.area.fake_context.fillRect).toHaveBeenCalledWith 10, 10, 10, 10
 
         describe 'follow', injector.harness ['directions', (directions) ->
             it 'changes direction to head`s direction when following head', injector.harness ['head', (head) ->

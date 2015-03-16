@@ -10,7 +10,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
     describe 'Constructor', () ->
         it 'initializes properties', injector.inject ['body', (body) ->
             expect(body.dispatcher).toBeInstanceOf injector.getType('dispatcher')
-            expect(body.canvas).toBeInstanceOf injector.getType('canvas')
+            expect(body.area).toBeInstanceOf injector.getType('area')
             expect(body.context).toBeInstanceOf injector.getType('fake_context')
             expect(body.directions).toBeInstanceOf injector.getType('directions')
         ]
@@ -21,9 +21,9 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
         ]
 
         describe 'draw', () ->
-            beforeEach injector.inject ['canvas', (canvas) ->
-                body.canvas = canvas
-                body.context = canvas.getContext('2d')
+            beforeEach injector.inject ['area', (area) ->
+                body.area = area
+                body.context = area.getContext('2d')
             ]
 
             it 'draws a horizontal line between tail and head', injector.inject ['tail', 'head', (tail, head) ->
@@ -189,7 +189,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
                 expect(body.context.fillRect).toHaveBeenCalledWith 20, 10, 10, 40
             ]
 
-            it 'draws an upward vertical line that overlaps the map', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+            it 'draws an upward vertical line that overlaps the area', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
                 axis_to.position =
                     x: 20,
                     y: 20
@@ -213,7 +213,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
 
             ]
 
-            it 'draws a downward vertical line that overlaps the map', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+            it 'draws a downward vertical line that overlaps the area', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
                 axis_to.position =
                     x: 20,
                     y: 180
@@ -237,7 +237,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
 
             ]
 
-            it 'draws a horizontal line to the right that overlaps the map', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+            it 'draws a horizontal line to the right that overlaps the area', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
                 axis_to.position =
                     x: 20,
                     y: 20
@@ -261,7 +261,7 @@ describe 'Body', injector.inject ['body', 'directions', (body, directions) ->
             ]
 
 
-            it 'draws a horizontal line to the left that overlaps the map', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
+            it 'draws a horizontal line to the left that overlaps the area', injector.inject ['axis', 'axis', (axis_from, axis_to) ->
                 axis_to.position =
                     x: 180,
                     y: 20

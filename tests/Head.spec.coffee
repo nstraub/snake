@@ -14,12 +14,14 @@ describe 'Head', injector.inject ['head', (head) ->
         delete injector.fakes.body
 
     describe 'constructor', () ->
-        it 'properly initializes properties', injector.inject ['directions', (directions) ->
-            expect(head.dispatcher).toBeInstanceOf injector.getType('dispatcher')
-            expect(head.canvas).toBeInstanceOf injector.getType('canvas')
-            expect(head.context).toBeInstanceOf injector.getType('fake_context')
-            expect(head.directions).toBeInstanceOf injector.getType('directions')
-            expect(head.direction).toBe directions.right
+        it 'properly initializes properties', injector.inject ['dispatcher', 'area', 'directions', (dispatcher, area, directions) ->
+            _head = new (injector.getType('head'))(dispatcher, area, directions)
+
+            expect(_head.dispatcher).toBeInstanceOf injector.getType('dispatcher')
+            expect(_head.area).toBeInstanceOf injector.getType('area')
+            expect(_head.context).toBeInstanceOf injector.getType('fake_context')
+            expect(_head.directions).toBeInstanceOf injector.getType('directions')
+            expect(_head.direction).toBe directions.right
         ]
 
     describe 'Methods', () ->
@@ -52,16 +54,16 @@ describe 'Head', injector.inject ['head', (head) ->
             ]
 
         describe 'draw', () ->
-            beforeEach injector.inject ['canvas', (canvas) ->
-                head.canvas = canvas
-                head.context = canvas.getContext('2d')
+            beforeEach injector.inject ['area', (area) ->
+                head.area = area
+                head.context = area.getContext('2d')
             ]
 
-            it 'places itself on the canvas at the specified position', () ->
+            it 'places itself on the area at the specified position', () ->
                 head.position = x: 10, y: 10
                 head.draw();
 
-                expect(head.canvas.fake_context.fillRect).toHaveBeenCalledWith 10, 10, 10, 10
+                expect(head.area.fake_context.fillRect).toHaveBeenCalledWith 10, 10, 10, 10
 
         describe 'changeDirection', injector.inject ['directions', (directions) ->
             afterEach () ->
