@@ -3,9 +3,10 @@
  */
 'use strict';
 (function () {
-    function Apple(area) {
+    function Apple(area, dispatcher) {
         this.canvas = area;
         this.context = area.getContext('2d');
+        dispatcher.on('reposition:apple', _.bind(this.reposition, this));
     }
 
     Apple.prototype.reposition = function () {
@@ -33,5 +34,5 @@
         this.context.fillStyle = 'black';
     };
 
-    injector.registerType('apple', ['area', Apple], 'singleton')
+    injector.registerType('apple', ['area', 'dispatcher', Apple], 'singleton')
 }());

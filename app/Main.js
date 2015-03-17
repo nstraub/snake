@@ -6,14 +6,7 @@
     var frame = 0, maze, speed = 30, animation, action = 'move';
     var directions = _([38, 39, 40, 37]);
 
-    function Main (snake, dispatcher) {
-
-        dispatcher.on('clear', function () {
-            if (maze) {
-                maze.draw();
-            }
-        });
-
+    function Main (snake, dispatcher, area) {
         dispatcher.on('stop', function () {
             window.cancelAnimationFrame(animation);
             animation = null;
@@ -27,7 +20,7 @@
         var $speed = $('#speed'),
             $current_score = $('#current-score');
 
-        var changeSpeed = function () {
+        function changeSpeed() {
             var newSpeed = $speed.val();
             if (isNaN(newSpeed)) {
                 $speed.val(31 - speed);
@@ -77,7 +70,9 @@
 
             snake.initialize({x: 60, y: 20}, 10);
 
-            dispatcher.trigger('animate')
+            dispatcher.trigger('reposition:apple');
+
+            dispatcher.trigger('animate');
             $speed.val()
         }
 
@@ -118,10 +113,26 @@
                 }
             }
         });
+        
+        $('#size--small').click(function () {
+            area.width = 250;
+            area.height = 250;
+            init();
+        });
+        $('#size--medium').click(function () {
+            area.width = 350;
+            area.height = 350;
+            init();
+        });
 
+        $('#size--large').click(function () {
+            area.width = 500;
+            area.height = 500;
+            init();
+        });
     }
 
-    injector.registerMain(['snake', 'dispatcher', Main]);
+    injector.registerMain(['snake', 'dispatcher', 'area', Main]);
 
     $(function () {
         var dispatcher = _.clone(Backbone.Events); //TODO replace with a non backbone dispatcher... or write one
