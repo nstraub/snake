@@ -3,11 +3,10 @@
  */
 'use strict';
 (function ($) {
-    var frame = 0, maze, speed = 20, animation, action = 'move';
+    var frame = 0, maze, speed = 30, animation, action = 'move';
     var directions = _([38, 39, 40, 37]);
 
     function Main (snake, dispatcher) {
-        snake.initialize({x: 60, y: 20}, 10);
 
         dispatcher.on('clear', function () {
             if (maze) {
@@ -25,9 +24,33 @@
             dispatcher.off('animate');
         });
 
+        var $speed = $('#speed'),
+            $current_score = $('#current-score');
+
+        var changeSpeed = function () {
+            var newSpeed = $speed.val();
+            if (isNaN(newSpeed)) {
+                $speed.val(31 - speed);
+            } else if (newSpeed > 30) {
+                $speed.val(30);
+                speed = 1;
+            } else {
+                speed = 31 - newSpeed;
+            }
+        };
+
+        $speed.blur(changeSpeed);
+        $speed.keydown(function (e) {
+            if (e.which === 13) {
+                changeSpeed();
+            }
+        });
+
         dispatcher.on('grow', function () {
             speed = accelerate(speed);
-            action = 'grow'
+            action = 'grow';
+            $current_score.text(+$current_score.text() +10);
+            $speed.val(Math.round((31 - speed) * 10) / 10);
         });
 
         function accelerate(speed) {
@@ -45,9 +68,21 @@
             return speed;
         }
 
-        dispatcher.on('animate', function () {
-            animation = window.requestAnimationFrame(animate);
-        });
+        function init() {
+            dispatcher.trigger('die');
+
+            dispatcher.on('animate', function () {
+                animation = window.requestAnimationFrame(animate);
+            });
+
+            snake.initialize({x: 60, y: 20}, 10);
+
+            dispatcher.trigger('animate')
+            $speed.val()
+        }
+
+
+
 
         function animate() {
             if (frame++ % Math.ceil(speed) === 0) {
@@ -58,20 +93,13 @@
                 }
 
                 dispatcher.trigger('draw');
-                /*            if (snakeHelper.eatApple(snake, apple)) {
-                 $currentScore.text(+$currentScore.text() +10);
-                 speed = snakeHelper.accelerate(speed);
-                 $speed.val(Math.round((31 - speed) * 10) / 10);
-                 }
-                 if (!apple.x) {
-                 apple.reposition();
-                 }
-                 apple.draw();*/
             }
             dispatcher.trigger('animate')
         }
 
-        animate();
+        init();
+
+        $('#game').click(init);
 
         $(document).keydown(function (e) {
             if (e.which === 32) {

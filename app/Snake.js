@@ -12,20 +12,23 @@
         this.directions = directions;
         this.area = area;
         this.map = map;
+        this.dispatcher.on('draw', _.bind(this.draw, this));
+        this.dispatcher.on('changed:direction', _.bind(this.addAxis, this));
     }
 
     Snake.prototype.initialize = function (start_position, length) {
         this.head.position = start_position;
+        this.head.direction = this.directions.right;
         this.tail.position = {
             x: start_position.x - (length * 10),
             y: start_position.y
         };
 
         this.tail.follow(this.head);
-        this.dispatcher.on('draw', _.bind(this.draw, this));
-        this.dispatcher.on('changed:direction', _.bind(this.addAxis, this));
 
-        this.bodies.push(this.parts_factory.createBody(this.tail, this.head));
+        this.axes = [];
+
+        this.bodies = [this.parts_factory.createBody(this.tail, this.head)];
     };
 
     Snake.prototype.draw = function () {
