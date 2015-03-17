@@ -39,6 +39,13 @@
             }
         });
 
+        var scotland_yard = false;
+
+        var $scotland_yard = $('#scotland-yard');
+        $scotland_yard.change(function () {
+            scotland_yard = $scotland_yard.prop('checked')
+        });
+
         dispatcher.on('grow', function () {
             speed = accelerate(speed);
             action = 'grow';
@@ -76,7 +83,19 @@
             $speed.val()
         }
 
+        var scotland_yard_frame = 0;
 
+        dispatcher.on('draw-all', function () {
+            if (scotland_yard) {
+                dispatcher.trigger('clear');
+                if (scotland_yard_frame++ === 4) {
+                    dispatcher.trigger('draw');
+                    scotland_yard_frame = 0;
+                }
+            } else {
+                dispatcher.trigger('draw');
+            }
+        });
 
 
         function animate() {
@@ -87,7 +106,7 @@
                     action = 'move';
                 }
 
-                dispatcher.trigger('draw');
+                dispatcher.trigger('draw-all');
             }
             dispatcher.trigger('animate')
         }
