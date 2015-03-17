@@ -2,7 +2,7 @@
  * Created by nico on 12/03/2015.
  */
 (function () {
-    function Snake(dispatcher, head, tail, parts_factory, directions, area) {
+    function Snake(dispatcher, head, tail, parts_factory, directions, area, map) {
         this.dispatcher = dispatcher;
         this.head = head;
         this.tail = tail;
@@ -11,6 +11,7 @@
         this.bodies = [];
         this.directions = directions;
         this.area = area;
+        this.map = map;
     }
 
     Snake.prototype.initialize = function (start_position, length) {
@@ -81,15 +82,32 @@
         } else {
             this.head.changing_direction = false;
         }
+
+        for (var i = 0; i < this.bodies.length; i++) {
+            var current = this.bodies[i],
+                next = i === this.bodies.length -1 ? current: this.bodies[i+1];
+
+            if (current.to === this.head || this.bodies[i+1] === this.head) {
+                continue;
+            }
+
+            if (current.to !== this.head && next.to !== this.head && current.isLocatedAt(this.head.position)) {
+                this.head.eat(current);
+            }
+        }
+
+        this.head.eat(this.map.getItemAt(this.head.position.x, this.head.position.y));
     };
 
     Snake.prototype.grow = function () {
         _move.call(this, this.head);
+        this.map.apple.reposition();
     };
 
     function _rebuild_body() {
         this.bodies = [];
         var part_tail_follows = this.axes[0] || this.head;
+
         this.bodies.push(this.parts_factory.createBody(this.tail, part_tail_follows));
 
         this.tail.follow(part_tail_follows);
@@ -111,5 +129,5 @@
         _rebuild_body.call(this);
     };
 
-    injector.registerType('snake', ['dispatcher', 'head', 'tail', 'partsFactory', 'directions', 'area', Snake]);
+    injector.registerType('snake', ['dispatcher', 'head', 'tail', 'partsFactory', 'directions', 'area', 'map', Snake]);
 } ());

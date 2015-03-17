@@ -2,6 +2,10 @@ describe 'snake', () ->
     injector.registerFake 'partsFactory', () ->
         @createBody = sinon.stub()
         @createAxis = sinon.stub()
+
+        body = injector.instantiate('body')
+        body.isLocatedAt = sinon.stub()
+        @createBody.returns(body)
         return
 
 

@@ -17,7 +17,7 @@
         if (!block) {
             return;
         }
-        if (block instanceof injector.getType('wall') || block instanceof injector.getType('body')) {
+        if (block instanceof injector.getType('body')) {
             this.dispatcher.trigger('die');
         } else if (block instanceof injector.getType('apple')) {
             this.dispatcher.trigger('grow');
@@ -31,7 +31,7 @@
     Head.prototype.changeDirection = function (direction) {
         var current_direction = this.direction;
 
-        if (current_direction !== direction) {
+        if (current_direction !== direction && (current_direction + direction) % 2 !== 0) {
             this.changing_direction = true;
             this.direction = direction;
             this.dispatcher.trigger('changed:direction', current_direction, direction)

@@ -3,11 +3,12 @@
  */
 'use strict';
 (function () {
-    function Body(dispatcher, area, directions) {
+    function Body(dispatcher, area, directions, head) {
         this.dispatcher = dispatcher;
         this.area = area;
         this.context = area.getContext('2d');
         this.directions = directions;
+        this.head = head;
     }
 
     Body.prototype.draw = function () {
@@ -60,13 +61,12 @@
 
     Body.prototype.isLocatedAt = function (position) {
         var high_point, low_point, precise_checker, range_checker;
-
         if (this.from.direction === this.directions.right || this.from.direction === this.directions.left) {
-            precise_checker ='x';
-            range_checker = 'y';
-        } else {
             precise_checker ='y';
             range_checker = 'x';
+        } else {
+            precise_checker ='x';
+            range_checker = 'y';
         }
 
         if (this.from.position[range_checker] > this.to.position[range_checker]) {
@@ -77,10 +77,8 @@
             high_point = this.to.position;
         }
 
-        return (position[precise_checker] - high_point[precise_checker] >= 0 || position[precise_checker] - high_point[precise_checker] <= 10 )
-            && position[range_checker] <= high_point[range_checker]
-            && position[range_checker] >= low_point[range_checker];
+        return position[precise_checker] === this.from.position[precise_checker] && position[range_checker] <= high_point[range_checker] && position[range_checker] >= low_point[range_checker];
     };
 
-    injector.registerType('body', ['dispatcher', 'area', 'directions', Body], 'transient')
+    injector.registerType('body', ['dispatcher', 'area', 'directions', 'head', Body], 'transient')
 }());

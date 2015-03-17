@@ -1,25 +1,62 @@
 /**
  * Created by nico on 14/03/2015.
  */
+'use strict';
 (function ($) {
-    var frame = 0, maze, speed = 20, animation;
+    var frame = 0, maze, speed = 20, animation, action = 'move';
     var directions = _([38, 39, 40, 37]);
-    function Main (snake, dispatcher, area) {
+
+    function Main (snake, dispatcher) {
         snake.initialize({x: 60, y: 20}, 10);
-        var context = area.getContext('2d');
 
         dispatcher.on('clear', function () {
-            context.clearRect(0, 0, area.width, area.height);
             if (maze) {
                 maze.draw();
             }
         });
 
-        dispatcher.trigger('draw');
+        dispatcher.on('stop', function () {
+            window.cancelAnimationFrame(animation);
+            animation = null;
+        });
+
+        dispatcher.on('die', function () {
+            dispatcher.trigger('stop');
+            dispatcher.off('animate');
+        });
+
+        dispatcher.on('grow', function () {
+            speed = accelerate(speed);
+            action = 'grow'
+        });
+
+        function accelerate(speed) {
+            if (speed > 1) {
+                if (speed > 10) {
+                    speed--;
+                } else if (speed > 5) {
+                    speed -= .5;
+                } else if (speed > 3) {
+                    speed -= .2;
+                } else {
+                    speed -= .1;
+                }
+            }
+            return speed;
+        }
+
+        dispatcher.on('animate', function () {
+            animation = window.requestAnimationFrame(animate);
+        });
 
         function animate() {
             if (frame++ % Math.ceil(speed) === 0) {
-                snake.move();
+                var this_action = action;
+                snake[action]();
+                if (this_action === 'grow'){
+                    action = 'move';
+                }
+
                 dispatcher.trigger('draw');
                 /*            if (snakeHelper.eatApple(snake, apple)) {
                  $currentScore.text(+$currentScore.text() +10);
@@ -31,11 +68,7 @@
                  }
                  apple.draw();*/
             }
-            if (snake.isDead) {
-                window.cancelAnimationFrame(animation);
-            } else {
-                animation = window.requestAnimationFrame(animate);
-            }
+            dispatcher.trigger('animate')
         }
 
         animate();
@@ -43,10 +76,9 @@
         $(document).keydown(function (e) {
             if (e.which === 32) {
                 if (animation) {
-                    window.cancelAnimationFrame(animation);
-                    animation = null;
+                    dispatcher.trigger('stop')
                 } else {
-                    draw();
+                    dispatcher.trigger('animate')
                 }
             } else {
                 var index = directions.findIndex(function (item) {
@@ -61,7 +93,7 @@
 
     }
 
-    injector.registerMain(['snake', 'dispatcher', 'area', Main]);
+    injector.registerMain(['snake', 'dispatcher', Main]);
 
     $(function () {
         var dispatcher = _.clone(Backbone.Events); //TODO replace with a non backbone dispatcher... or write one

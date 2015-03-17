@@ -1,12 +1,13 @@
-describe 'Head', injector.inject ['head', (head) ->
+describe 'Head', injector.harness ['head', (head) ->
     beforeAll add_instanceof_matcher
 
-    injector.registerFake 'apple', ->
-        return
-    injector.registerFake 'wall', ->
-        return
-    injector.registerFake 'body', ->
-        return
+    beforeAll () ->
+        injector.registerFake 'apple', ->
+            return
+        injector.registerFake 'wall', ->
+            return
+        injector.registerFake 'body', ->
+            return
 
     afterAll () ->
         delete injector.fakes.apple

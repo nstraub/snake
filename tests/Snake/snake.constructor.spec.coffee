@@ -4,4 +4,5 @@ snake_constructor_spec = injector.harness ['snake', (snake) ->
         expect(snake.head).toBeInstanceOf injector.getType 'head'
         expect(snake.tail).toBeInstanceOf injector.getType 'tail'
         expect(snake.parts_factory).toBeInstanceOf injector.getType 'partsFactory'
+        expect(snake.map).toBeInstanceOf injector.getType 'map'
 ]
