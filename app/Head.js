@@ -9,7 +9,7 @@
         this.context = area.getContext('2d');
         this.directions = directions;
         this.direction = directions.right;
-        this.dispatcher.on('change:direction', _.bind(this.enqueueDirectionChange, this))
+        this.dispatcher.on('change:direction', _.bind(this.enqueueDirectionChange, this));
         this.direction_change_queue = [];
     }
 
@@ -47,5 +47,5 @@
     };
 
 
-    injector.registerType('head', ['dispatcher', 'area', 'directions', Head], 'singleton');
+    injector.registerType('head', Head, 'singleton');
 }());

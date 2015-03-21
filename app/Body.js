@@ -80,5 +80,5 @@
         return position[precise_checker] === this.from.position[precise_checker] && position[range_checker] <= high_point[range_checker] && position[range_checker] >= low_point[range_checker];
     };
 
-    injector.registerType('body', ['dispatcher', 'area', 'directions', 'head', Body], 'transient')
+    injector.registerType('body', Body, 'transient')
 }());

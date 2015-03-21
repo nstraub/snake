@@ -23,5 +23,5 @@
         this.following = part;
     };
 
-    injector.registerType('tail', ['dispatcher', 'area', Tail], 'singleton');
+    injector.registerType('tail', Tail, 'singleton');
 }());

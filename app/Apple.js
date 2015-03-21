@@ -34,5 +34,5 @@
         this.context.fillStyle = 'black';
     };
 
-    injector.registerType('apple', ['area', 'dispatcher', Apple], 'singleton')
+    injector.registerType('apple', Apple, 'singleton')
 }());

@@ -1,12 +1,13 @@
 /**
  * Created by nico on 12/03/2015.
  */
+'use strict';
 (function () {
-    function Snake(dispatcher, head, tail, parts_factory, directions, area, map) {
+    function Snake(dispatcher, head, tail, partsFactory, directions, area, map) {
         this.dispatcher = dispatcher;
         this.head = head;
         this.tail = tail;
-        this.parts_factory = parts_factory;
+        this.parts_factory = partsFactory;
         this.axes = [];
         this.bodies = [];
         this.directions = directions;
@@ -132,5 +133,5 @@
         _rebuild_body.call(this);
     };
 
-    injector.registerType('snake', ['dispatcher', 'head', 'tail', 'partsFactory', 'directions', 'area', 'map', Snake]);
+    injector.registerType('snake', Snake);
 } ());

@@ -1,14 +1,7 @@
-located_at_spec = injector.inject ['body', 'directions', (body, directions) ->
-    describe 'horizontal', () ->
-        describe 'from tail', () ->
-            beforeAll injector.inject ['head', 'tail', (head, tail) ->
-                tail.position = x: 20, y: 20
-                head.position = x: 60, y: 20
-                head.direction = tail.direction = directions.right
-
-                body.from = tail
-                body.to = head
-            ]
+located_at_spec = injector.inject (body, directions) ->
+    prepare_horizontal_body_located_at_tests = (before_all) ->
+        () ->
+            beforeAll before_all
 
             it 'returns true when position is within bounds', () ->
                 expect(body.isLocatedAt(x: 30, y: 20)).toBe true
@@ -22,6 +15,15 @@ located_at_spec = injector.inject ['body', 'directions', (body, directions) ->
                 expect(body.isLocatedAt(x: 40, y: 10)).toBe false
             it 'returns false when position is directly below', () ->
                 expect(body.isLocatedAt(x: 50, y: 10)).toBe false
+
+    describe 'horizontal', () ->
+        describe 'from tail to head', prepare_horizontal_body_located_at_tests(injector.inject (head, tail) ->
+                tail.position = x: 20, y: 20
+                head.position = x: 60, y: 20
+                head.direction = tail.direction = directions.right
+
+                body.from = tail
+                body.to = head)
 
     ###it 'returns true if the passed position is contained within a horizontal line drawn to the left', () ->
         body.from =
@@ -92,4 +94,3 @@ located_at_spec = injector.inject ['body', 'directions', (body, directions) ->
             direction: directions.down
 
         expect(body.isLocatedAt(x: 20, y: 30)).toBe true###
-]

@@ -1,6 +1,7 @@
 /**
  * Created by nico on 16/03/2015.
  */
+'use strict';
 (function () {
     function Axis(area) {
         this.area = area;
@@ -11,5 +12,5 @@
         this.context.fillRect(this.position.x, this.position.y, 10, 10);
     };
 
-    injector.registerType('axis', ['area', Axis]);
+    injector.registerType('axis', Axis);
 }());

@@ -26,5 +26,5 @@
         return null;
     };
 
-    injector.registerType('map', ['area', 'dispatcher', 'apple', Map], 'singleton');
+    injector.registerType('map', Map, 'singleton');
 }());

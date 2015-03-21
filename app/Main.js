@@ -3,10 +3,10 @@
  */
 'use strict';
 (function ($) {
-    var frame = 0, maze, speed = 30, animation, action = 'move';
+    var frame = 0, speed = 30, animation, action = 'move';
     var directions = _([38, 39, 40, 37]);
 
-    function Main (snake, dispatcher, area) {
+    injector.registerMain(function (snake, dispatcher, area) {
         dispatcher.on('stop', function () {
             window.cancelAnimationFrame(animation);
             animation = null;
@@ -30,7 +30,7 @@
             } else {
                 speed = 31 - newSpeed;
             }
-        };
+        }
 
         $speed.blur(changeSpeed);
         $speed.keydown(function (e) {
@@ -149,9 +149,7 @@
             area.height = 500;
             init();
         });
-    }
-
-    injector.registerMain(['snake', 'dispatcher', 'area', Main]);
+    });
 
     $(function () {
         var dispatcher = _.clone(Backbone.Events); //TODO replace with a non backbone dispatcher... or write one
